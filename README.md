@@ -13,6 +13,3 @@ todo:
     * command line inputs  
   * secondatry:  
     * dynamic scaling of gchance,achance  
-  * extra:  
-    * right now the program is functional-based, might redesign with a class-based approach  
-    
