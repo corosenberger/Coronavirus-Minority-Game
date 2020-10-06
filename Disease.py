@@ -1,23 +1,21 @@
-import math
 import random
 
-forceSick = 5
-startSickChance = 0.01
-startSickSymptomaticChance = 0.5
-rateOfSpread = 0.05
-sickTime = 3
-incubationTime = 14
-immuneTime = 90
-chanceOfDeath = 0.02
+class Disease:
+    def __init__(self,startSickChance,startSymptomaticChance,rateOfSpread,
+                 sickTime,incubationTime,immuneTime,chanceOfDeath):
+        self.startSickChance = startSickChance
+        self.startSymptomaticChance = startSymptomaticChance
+        self.rateOfSpread = rateOfSpread
+        self.sickTime = sickTime
+        self.incubationTime = incubationTime
+        self.immuneTime = immuneTime
+        self.chanceOfDeath = chanceOfDeath
 
-def squash(x):
-  return 2/(1+math.exp(-x)) - 1
-
-def infect(attendees):
-    for restaurant in attendees:
-        numInfected = sum(1 for a in restaurant if a.isSick())
-        chanceOfInfection = 1-((1-rateOfSpread)**numInfected)
-        for a in restaurant:
-            if random.random() <= chanceOfInfection:
-                a.infect()
+    def infect(self,attendance):
+        for restaurant in attendance:
+            numInfected = sum(1 for a in restaurant if a.isSick())
+            chanceOfInfection = 1-((1-self.rateOfSpread)**numInfected)
+            for a in restaurant:
+                if random.random() <= chanceOfInfection:
+                    a.infect(self)
             
