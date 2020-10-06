@@ -2,14 +2,14 @@ import Disease
 import Group
 from matplotlib import pyplot as plt
 
-def main(startSickChance,startSymptomaticChance,rateOfSpread,sickTime,incubationTime,
+def main(numDays,startSickChance,startSymptomaticChance,rateOfSpread,sickTime,incubationTime,
          immuneTime,chanceOfDeath,numGroups,numAgents,numRestaurants,gChance,aChance):
     disease = Disease.Disease(startSickChance,startSymptomaticChance,rateOfSpread,
                  sickTime,incubationTime,immuneTime,chanceOfDeath)
     groups = Group.Groups(numGroups,numAgents,numRestaurants,gChance,aChance,disease)
     sick, healthy, dead = {}, {}, {}
     
-    for i in range(1000):
+    for i in range(numDays):
         sick[i] = groups.getSick()
         healthy[i] = groups.getHealthy()
         dead[i] = groups.getDead()
@@ -23,18 +23,20 @@ if __name__ == '__main__':
     #Disease inputs
     startSickChance=0.01
     startSymptomaticChance=0.5
-    rateOfSpread=0.05
-    sickTime=3
+    rateOfSpread=0.01
+    sickTime=7
     incubationTime=14
-    immuneTime=90 
+    immuneTime=90
     chanceOfDeath=0.02
     
     #Groups inputs
     numGroups=2000
     numAgents=10000
     numRestaurants=10
-    gChance=0.05
-    aChance=0.9
+    gChance=0.1
+    aChance=1
+    
+    numDays=1000
          
-    main(startSickChance,startSymptomaticChance,rateOfSpread,sickTime,incubationTime,
+    main(numDays,startSickChance,startSymptomaticChance,rateOfSpread,sickTime,incubationTime,
          immuneTime,chanceOfDeath,numGroups,numAgents,numRestaurants,gChance,aChance)
