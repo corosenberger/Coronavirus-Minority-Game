@@ -11,5 +11,5 @@ todo:
     * group preferences  
     * restaurant popularity  
     * command line inputs  
-  * secondatry:  
+  * secondary:  
     * dynamic scaling of gchance,achance  
