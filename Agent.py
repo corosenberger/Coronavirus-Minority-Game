@@ -21,12 +21,8 @@ class Agent:
                 self.phase = 'symptomatic'
                 self.daysLeft = disease.sickTime
             elif self.phase == 'symptomatic':
-                if random.random() <= disease.chanceOfDeath:
-                    self.phase = 'dead'
-                    self.daysLeft = -1
-                else:
-                    self.phase = 'immune'
-                    self.daysLeft = disease.immuneTime
+                self.phase = 'immune'
+                self.daysLeft = disease.immuneTime
             else:
                 self.phase = 'healthy'
                 self.daysLeft = -1
@@ -35,16 +31,10 @@ class Agent:
         if self.phase == 'healthy':
             self.phase = 'asymptomatic'
             self.daysLeft = disease.incubationTime
-            
-    def willGoOut(self,aChance):
-        return random.random() <= aChance and self.phase != 'symptomatic' and self.phase != 'dead'
     
     def isHealthy(self):
         return self.phase == 'healthy' or self.phase == 'immune'
     
     def isSick(self):
         return self.phase == 'symptomatic' or self.phase == 'asymptomatic'
-    
-    def isDead(self):
-        return self.phase == 'dead'
         
