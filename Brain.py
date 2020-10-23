@@ -3,13 +3,12 @@ import ast
 import os
 
 def initFromFile(fileDir): #loads previously saved training data
-    try:
+    if os.path.exists(fileDir):
         save = open(fileDir,"r")
         saveData = ast.literal_eval(save.read()) #returns layers, weights, biases
         net = Brain(saveData[0],weights=saveData[1],biases=saveData[2])
         return net
-    except FileNotFoundError: #in case a file is inputted that does not exist
-        print("invalid save")
+    else:
         return None
 
 class Brain:
@@ -30,6 +29,9 @@ class Brain:
             for i in range(1,len(self.layerList)): #allows for the use of previously trained nets
                 self.weightsList.append(np.array(weights[i]).reshape(self.layerList[i],self.layerList[i-1]))
                 self.biasesList.append(np.array(biases[i]).reshape(len(biases[i]),1))
+
+    def mutate(self):
+        pass
 
     def computeOutput(self,inputList): #foward propagation/returns output activations
         self.valuesList = [0]*len(self.layerList) #resets all the activation
