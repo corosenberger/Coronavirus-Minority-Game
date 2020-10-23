@@ -6,14 +6,15 @@ def initFromFile(fileDir): #loads previously saved training data
     try:
         save = open(fileDir,"r")
         saveData = ast.literal_eval(save.read()) #returns layers, weights, biases
-        net = Brain(saveData[0],saveData[1],saveData[2])
+        net = Brain(saveData[0],weights=saveData[1],biases=saveData[2])
         return net
     except FileNotFoundError: #in case a file is inputted that does not exist
         print("invalid save")
         return None
 
 class Brain:
-    def __init__(self,layers,weights=None,biases=None):
+    def __init__(self,layers,**kwargs):
+        weights, biases = kwargs.get('weights',None), kwargs.get('biases',None)
         self.layerList = layers #the structure of the neural net
         self.weightsList = [0] #all the weights
         self.biasesList = [0] #all the biases
