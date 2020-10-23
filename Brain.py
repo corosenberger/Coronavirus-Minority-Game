@@ -39,7 +39,22 @@ class Brain:
         self.valuesList[0] = np.array(inputList,dtype=np.float32).reshape(len(inputList),1) #sets 
         for i in range(1,len(self.layerList)): #traverses each layer with an activation
             self.valuesList[i] = 1.0/(1+np.exp(-(self.weightsList[i] @ self.valuesList[i-1] + self.biasesList[i]))) #saves the activation from that layer
+            self.derivs[i] = self.valuesList[i] * (1-self.valuesList[i]) #saves the derivative of that activation
         return self.valuesList[len(self.layerList)-1].tolist() #returns output (activation of the final layer)
+
+    def backprop(self,actualList,LR): #calculates gradient for a single input and adds it to previously calculated gradients
+        delta = self.derivs[len(self.layerList)-1]*(self.valuesList[len(self.layerList)-1] - np.array(actualList).reshape(len(actualList),1)) #used to calculate gradient
+        for i in range(len(self.layerList)-1,0,-1): #traverses each layer with weight(s)/bias(es) backwards
+            self.wgrads[i] += LR * (delta @ self.valuesList[i-1].transpose()) #weight gradients of layer i
+            self.bgrads[i] += LR * delta #bias gradients of layer i
+            delta = self.derivs[i-1] * (self.weightsList[i].transpose() @ delta) #updates for the next layer
+    
+    def applyGradient(self): #applies and resets previously calculated gradients
+        for i in range(1,len(self.layerList)): #traverses each layer with weight(s)/bias(es)
+            self.weightsList[i] -= self.wgrads[i] #applies weight gradient
+            self.biasesList[i] -= self.bgrads[i] #applies bias gradient
+        self.wgrads = [0]*len(self.layerList) #resets weight gradients
+        self.bgrads = [0]*len(self.layerList) #resets bias gradients
 
     def writeSave(self,fileName): #saves training data in a way that if you stop mid-write it will not delete your training data
         if os.path.exists("tempSave.txt"): #would not recomend keeping a file called tempSave.txt
