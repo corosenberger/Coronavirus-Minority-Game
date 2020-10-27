@@ -2,6 +2,7 @@ import random
 
 class Agent:
     def __init__(self,disease):
+        self.wonLastRound = True
         if random.random() <= disease.startSickChance:
             if random.random() <= disease.startSymptomaticChance:
                 self.phase = 'symptomatic'

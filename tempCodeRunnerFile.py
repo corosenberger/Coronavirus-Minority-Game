@@ -1,0 +1,2 @@
+
+        self.startButton.setEnabled(False)
