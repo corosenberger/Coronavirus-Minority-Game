@@ -3,6 +3,8 @@ import Brain
 from collections import deque
 import random
 
+MAX_GROUP_SIZE = 10
+
 def SUBTEAM_2_PLACEHOLDER(groups,agents,aChance):
     subteam_2_output = [random.random() <= aChance and a.phase != 'symptomatic' for a in agents]
     q = deque(subteam_2_output)
@@ -43,14 +45,19 @@ class Groups:
         def __delitem__(self,i): self.agents.pop(i)
 
     def __init__(self,numGroups,numAgents,numRestaurants,gChance,aChance,disease):
-        assert numGroups <= numAgents
+        assert numGroups <= numAgents / 5
         self.numRestaurants = numRestaurants
         self.disease = disease
         self.gChance = gChance
         self.aChance = aChance
 
         groupSizes = [1]*numGroups
-        for _ in range(numAgents-numGroups): groupSizes[random.randint(0,numGroups-1)] += 1
+        for _ in range(numAgents-numGroups): 
+            randIdx = random.randint(0,numGroups-1)
+            groupSizes[randIdx] += 1
+            if groupSizes[randIdx] == MAX_GROUP_SIZE:
+                groupSizes[numGroups-1], groupSizes[randIdx] = groupSizes[randIdx], groupSizes[numGroups-1]
+                numGroups -= 1
         self.groups = [self.Group(sz,disease) for sz in groupSizes]
         self.agents = [a for g in self.groups for a in g]
 
