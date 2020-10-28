@@ -11,8 +11,8 @@ def main(inputs):
     for i in range(inputs['numDays']):
         sick[i] = groups.getSick()
         healthy[i] = groups.getHealthy()
-        attendance = groups.passDay()
-        winners[i] = sum(1 for v in groups.getWinners(attendance) if v)
+        groups.passDay()
+        winners[i] = sum(1 for v in groups.getWinners() if v)
 
     return sick,healthy,winners
 

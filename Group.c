@@ -31,8 +31,43 @@ static PyObject* getGroupSizes(PyObject* self, PyObject* args) {
     return out;
 }
 
+static PyObject* getWinners(PyObject* self, PyObject* args) {
+    PyObject* lt;
+    PyObject* sickness;
+
+    if (!PyArg_ParseTuple(args,"OO",&lt,&sickness)) return NULL;
+    if(!PyList_Check(lt)) return NULL;
+
+    int numAttendeesWeighted = 0;
+    for(int i = 0; i < PyList_Size(lt); i++) {
+        PyObject* agent = PyList_GetItem(lt,i);
+        PyObject* awgo = PyObject_GetAttrString(agent,"willGoOut");
+        if(PyObject_IsTrue(awgo)) numAttendeesWeighted++;
+    }
+    numAttendeesWeighted *= 2;
+
+    PyObject* winners = PyList_New(PyList_Size(lt));
+    int attendeesWin = numAttendeesWeighted <= PyList_Size(lt);
+    int homiesWin = numAttendeesWeighted > PyList_Size(lt);
+    for(int i = 0; i < PyList_Size(lt); i++) {
+        PyObject* agent = PyList_GetItem(lt,i);
+        PyObject* awgo = PyObject_GetAttrString(agent,"willGoOut");
+        int isSick = PyObject_IsTrue(PyList_GetItem(sickness,i));
+
+        PyObject* wonRound;
+        if(PyObject_IsTrue(awgo)) wonRound = (attendeesWin && !isSick) ? Py_True:Py_False;
+        else wonRound = (homiesWin || isSick) ? Py_True:Py_False;
+
+        PyObject_SetAttrString(agent,"wonLastRound",wonRound);
+        PyList_SetItem(winners,i,wonRound);
+    }
+
+    return winners;
+}
+
 static PyMethodDef GroupCMethods[] = {
     {"getGroupSizes", getGroupSizes, METH_VARARGS, NULL},
+    {"getWinners", getWinners, METH_VARARGS, NULL},
     {NULL,NULL,0,NULL}
 };
 

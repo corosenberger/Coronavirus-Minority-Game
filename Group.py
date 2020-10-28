@@ -9,7 +9,7 @@ MAX_GROUP_SIZE = 10
 def SUBTEAM_2_PLACEHOLDER(groups,agents,aChance):
     subteam_2_output = [random.random() <= aChance and a.phase != 'symptomatic' for a in agents]
     q = deque(subteam_2_output)
-    for g in groups: g.willGoOut = [q.popleft() for _ in g]
+    for g in groups: g.willGoOut = [a.setwillGoOut(q.popleft()) for a in g]
 
 class Groups:
     class Group:
@@ -30,7 +30,7 @@ class Groups:
                 brainOutput = self.brain.computeOutput(self.willGoOut+self.wonLastRound)
                 self.goingOut = brainOutput[0] > brainOutput[1]
                 return self.goingOut
-            return [a for i,a in enumerate(self.agents) if self.willGoOut[i]] if groupGoingOut() else []
+            return [a for a in self.agents if a.willGoOut] if groupGoingOut() else []
 
         def updateGroup(self):
             self.wonLastRound = [a.wonLastRound for a in self.agents]
@@ -75,15 +75,9 @@ class Groups:
         for a in self.agents: a.passDay(self.disease)
         return attendance
 
-    def getWinners(self,attendance):
-        attendance = set(a for r in attendance for g in r for a in g)
-        attendeesWin = len(attendance) <= len(self.agents)/2
-        homiesWin = len(attendance) > len(self.agents)/2
-        winners = []
-        for a in self.agents:
-            if a in attendance: winners.append(attendeesWin and a.isHealthy())
-            else: winners.append(homiesWin or a.isSick())
-            a.wonLastRound = winners[-1]
+    def getWinners(self):
+        sickness = [a.isSick() for a in self.agents]
+        winners = gc.getWinners(self.agents,sickness)
         for g in self.groups:
             g.updateGroup()
         return winners

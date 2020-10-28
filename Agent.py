@@ -3,6 +3,7 @@ import random
 class Agent:
     def __init__(self,disease):
         self.wonLastRound = True
+        self.willGoOut = False
         if random.random() <= disease.startSickChance:
             if random.random() <= disease.startSymptomaticChance:
                 self.phase = 'symptomatic'
@@ -27,6 +28,10 @@ class Agent:
             else:
                 self.phase = 'healthy'
                 self.daysLeft = -1
+
+    def setwillGoOut(self,wgo):
+        self.willGoOut = wgo
+        return self.willGoOut
     
     def infect(self,disease):
         if self.phase == 'healthy':
