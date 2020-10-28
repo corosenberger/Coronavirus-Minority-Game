@@ -60,7 +60,7 @@ class Ui_Main(object):
         self.outputLabel.setScaledContents(True)
         self.outputLabel.setObjectName("outputLabel")
         self.errorLabel = QtWidgets.QLabel(self.centralwidget)
-        self.errorLabel.setGeometry(QtCore.QRect(60, 530, 211, 71))
+        self.errorLabel.setGeometry(QtCore.QRect(40, 530, 211, 71))
         self.errorLabel.setObjectName("errorLabel")
         self.rosTextEdit = QtWidgets.QTextEdit(self.centralwidget)
         self.rosTextEdit.setGeometry(QtCore.QRect(20, 410, 241, 41))

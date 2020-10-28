@@ -32,25 +32,26 @@ static PyObject* getGroupSizes(PyObject* self, PyObject* args) {
 }
 
 static PyObject* getWinners(PyObject* self, PyObject* args) {
-    PyObject* lt;
+    PyObject* agents;
     PyObject* sickness;
 
-    if (!PyArg_ParseTuple(args,"OO",&lt,&sickness)) return NULL;
-    if(!PyList_Check(lt)) return NULL;
+    if (!PyArg_ParseTuple(args,"OO",&agents,&sickness)) return NULL;
+    if(!PyList_Check(agents)) return NULL;
+    if(!PyList_Check(sickness)) return NULL;
 
     int numAttendeesWeighted = 0;
-    for(int i = 0; i < PyList_Size(lt); i++) {
-        PyObject* agent = PyList_GetItem(lt,i);
+    for(int i = 0; i < PyList_Size(agents); i++) {
+        PyObject* agent = PyList_GetItem(agents,i);
         PyObject* awgo = PyObject_GetAttrString(agent,"willGoOut");
         if(PyObject_IsTrue(awgo)) numAttendeesWeighted++;
     }
     numAttendeesWeighted *= 2;
 
-    PyObject* winners = PyList_New(PyList_Size(lt));
-    int attendeesWin = numAttendeesWeighted <= PyList_Size(lt);
-    int homiesWin = numAttendeesWeighted > PyList_Size(lt);
-    for(int i = 0; i < PyList_Size(lt); i++) {
-        PyObject* agent = PyList_GetItem(lt,i);
+    PyObject* winners = PyList_New(PyList_Size(agents));
+    int attendeesWin = numAttendeesWeighted <= PyList_Size(agents);
+    int homiesWin = numAttendeesWeighted > PyList_Size(agents);
+    for(int i = 0; i < PyList_Size(agents); i++) {
+        PyObject* agent = PyList_GetItem(agents,i);
         PyObject* awgo = PyObject_GetAttrString(agent,"willGoOut");
         int isSick = PyObject_IsTrue(PyList_GetItem(sickness,i));
 

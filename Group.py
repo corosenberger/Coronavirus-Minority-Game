@@ -76,8 +76,7 @@ class Groups:
         return attendance
 
     def getWinners(self):
-        sickness = [a.isSick() for a in self.agents]
-        winners = gc.getWinners(self.agents,sickness)
+        winners = gc.getWinners(self.agents,[a.isSick() for a in self.agents])
         for g in self.groups:
             g.updateGroup()
         return winners
