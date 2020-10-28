@@ -1,4 +1,4 @@
-import CExtension as c
+import DiseaseC as dc
 import random
 
 class Disease:
@@ -14,7 +14,7 @@ class Disease:
     def infect(self,attendance):
         for restaurant in attendance:
             numInfected = sum(1 for g in restaurant for a in g if a.isSick())
-            chanceOfInfection = c.getChanceOfInfection(self.rateOfSpread,numInfected)
+            chanceOfInfection = dc.getChanceOfInfection(self.rateOfSpread,numInfected)
             for g in restaurant: 
                 for a in g:
                     if random.random() <= chanceOfInfection:

@@ -1,3 +1,4 @@
+import GroupC as gc
 import Agent
 import Brain
 from collections import deque
@@ -51,13 +52,7 @@ class Groups:
         self.gChance = gChance
         self.aChance = aChance
 
-        groupSizes = [1]*numGroups
-        for _ in range(numAgents-numGroups): 
-            randIdx = random.randint(0,numGroups-1)
-            groupSizes[randIdx] += 1
-            if groupSizes[randIdx] == MAX_GROUP_SIZE:
-                groupSizes[numGroups-1], groupSizes[randIdx] = groupSizes[randIdx], groupSizes[numGroups-1]
-                numGroups -= 1
+        groupSizes = gc.getGroupSizes(numAgents,numGroups,MAX_GROUP_SIZE)
         self.groups = [self.Group(sz,disease) for sz in groupSizes]
         self.agents = [a for g in self.groups for a in g]
 

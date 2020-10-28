@@ -1,7 +1,5 @@
-#%%
 import Disease
 import Group
-from matplotlib import pyplot as plt
 
 def main(inputs):
     disease = Disease.Disease(inputs['startSickChance'],inputs['startSymptomaticChance'],
@@ -37,6 +35,4 @@ if __name__ == '__main__':
             
         'numDays': 1000
     }
-         
     main(inputs)
-# %%
