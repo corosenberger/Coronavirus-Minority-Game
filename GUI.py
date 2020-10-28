@@ -19,7 +19,6 @@ class MainRunner(QtCore.QRunnable):
         self.signals.result.emit(result)
         self.signals.finished.emit()
 
-
 class MinorityGameGUI(XMLOut.Ui_Main):
     def __init__(self):
         super(MinorityGameGUI, self).__init__()
@@ -71,7 +70,7 @@ class MinorityGameGUI(XMLOut.Ui_Main):
                 else:
                     return False
         if setInputs():
-            self.errorLabel.setText('No Errors\nCurrently Present')
+            self.errorLabel.setText('Simulation Processing\nPlease Wait')
             self.startButton.setEnabled(False)
             mr = MainRunner(self.inputs)
             mr.signals.result.connect(self.startButtonResults)
@@ -90,6 +89,7 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         self.outputLabel.setPixmap(QtGui.QPixmap('current.png'))
 
     def startButtonFinished(self):
+        self.errorLabel.setText('No Errors\nCurrently Present')
         self.startButton.setEnabled(True)
 
 if __name__ == "__main__":

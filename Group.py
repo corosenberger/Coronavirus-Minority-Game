@@ -45,7 +45,7 @@ class Groups:
         def __delitem__(self,i): self.agents.pop(i)
 
     def __init__(self,numGroups,numAgents,numRestaurants,gChance,aChance,disease):
-        assert numGroups <= numAgents / MAX_GROUP_SIZE
+        assert numGroups*MAX_GROUP_SIZE >= numAgents
         self.numRestaurants = numRestaurants
         self.disease = disease
         self.gChance = gChance
