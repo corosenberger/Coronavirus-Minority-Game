@@ -1,5 +1,7 @@
 import Main as be
 import XMLOut
+import os
+from shutil import copyfile
 from PyQt5 import QtCore, QtGui, QtWidgets
 from matplotlib import pyplot as plt
 
@@ -46,11 +48,14 @@ class MinorityGameGUI(XMLOut.Ui_Main):
     def setupUi(self, Main):
         super(MinorityGameGUI, self).setupUi(Main)
         self.startButton.clicked.connect(self.startButtonClicked)
+        self.loadButton.clicked.connect(self.loadButtonClicked)
+        self.saveButton.clicked.connect(self.saveButtonClicked)
 
     def startButtonClicked(self):
         def setInputs():
             noError = True
             try:
+                numAgents = numDays = incubationTime = numRestaurants = rateOfSpread = -1
                 numAgents = int(self.popTextEdit.toPlainText())
                 numDays = int(self.daysTextEdit.toPlainText())
                 incubationTime = int(self.stimeTextEdit.toPlainText())
@@ -59,17 +64,15 @@ class MinorityGameGUI(XMLOut.Ui_Main):
             except:
                 noError = False
             finally:
-                if noError and numAgents >= 10 and numDays > 0 and incubationTime > 0 and numRestaurants > 0 and 0 <= rateOfSpread <= 1:
+                if numAgents >= 10 and numDays > 0 and incubationTime > 0 and numRestaurants > 0 and 0 <= rateOfSpread <= 1:
                     self.inputs['numAgents'] = numAgents
                     self.inputs['numGroups'] = numAgents // 5
                     self.inputs['numDays'] = numDays
                     self.inputs['incubationTime'] = incubationTime
                     self.inputs['numRestaurants'] = numRestaurants
                     self.inputs['rateOfSpread'] = rateOfSpread
-                    return True
-                else:
-                    return False
-        if setInputs():
+                return noError
+        if setInputs(): #for full operation, use this line
             self.errorLabel.setText('Simulation Processing\nPlease Wait')
             self.startButton.setEnabled(False)
             mr = MainRunner(self.inputs)
@@ -82,7 +85,7 @@ class MinorityGameGUI(XMLOut.Ui_Main):
     def startButtonResults(self,outputs):
         sick, healthy, winners = outputs
         x = list(sick.keys())
-        y = list((a,b,c) for a,b,c in zip(sick.values(),healthy.values(),winners.values()))
+        y = list((c,a,b) for a,b,c in zip(sick.values(),healthy.values(),winners.values()))
         plt.plot(x,y)
         plt.savefig('.\\__pictures__\\current.png')
         plt.close()
@@ -91,6 +94,36 @@ class MinorityGameGUI(XMLOut.Ui_Main):
     def startButtonFinished(self):
         self.errorLabel.setText('No Errors\nCurrently Present')
         self.startButton.setEnabled(True)
+        self.loadButton.setEnabled(True)
+        self.saveButton.setEnabled(True)
+
+    def loadButtonClicked(self):
+        if not (os.path.exists(".\\__save__\\save.txt") and os.path.exists(".\\__save__\\save.png")):
+            self.errorLabel.setText("No Save Data \nwas Found")
+            return
+        self.outputLabel.setPixmap(QtGui.QPixmap('.\\__save__\\save.png'))
+        save = open(".\\__save__\\save.txt","r")
+        saveData = save.read().split(',')
+        save.close()
+        self.popTextEdit.setText(saveData[0])
+        self.daysTextEdit.setText(saveData[1])
+        self.stimeTextEdit.setText(saveData[2])
+        self.norTextEdit.setText(saveData[3])
+        self.rosTextEdit.setText(saveData[4])
+
+    def saveButtonClicked(self):
+        copyfile('.\\__pictures__\\current.png','.\\__save__\\save.png')
+        if os.path.exists(".\\__save__\\save.txt"):
+            os.remove(".\\__save__\\save.txt")
+        save = open(".\\__save__\\save.txt","w+")
+        saveData = ""
+        saveData += str(self.inputs['numAgents']) + ','
+        saveData += str(self.inputs['numDays']) + ','
+        saveData += str(self.inputs['incubationTime']) + ','
+        saveData += str(self.inputs['numRestaurants']) + ','
+        saveData += str(self.inputs['rateOfSpread'])
+        save.write(saveData)
+        save.close()
 
 if __name__ == "__main__":
     import sys

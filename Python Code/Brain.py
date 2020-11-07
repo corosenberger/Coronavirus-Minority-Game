@@ -42,7 +42,7 @@ class Brain:
             self.derivs[i] = self.valuesList[i] * (1-self.valuesList[i]) #saves the derivative of that activation
         return self.valuesList[len(self.layerList)-1].tolist() #returns output (activation of the final layer)
 
-    def backprop(self,actualList,LR): #calculates gradient for a single input and adds it to previously calculated gradients
+    def backprop(self,actualList,LR=1): #calculates gradient for a single input and adds it to previously calculated gradients
         delta = self.derivs[len(self.layerList)-1]*(self.valuesList[len(self.layerList)-1] - np.array(actualList).reshape(len(actualList),1)) #used to calculate gradient
         for i in range(len(self.layerList)-1,0,-1): #traverses each layer with weight(s)/bias(es) backwards
             self.wgrads[i] += LR * (delta @ self.valuesList[i-1].transpose()) #weight gradients of layer i

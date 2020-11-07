@@ -46,7 +46,7 @@ class Ui_Main(object):
         self.norLabel.setGeometry(QtCore.QRect(20, 280, 421, 21))
         self.norLabel.setObjectName("norLabel")
         self.loadButton = QtWidgets.QPushButton(self.centralwidget)
-        self.loadButton.setEnabled(False)
+        self.loadButton.setEnabled(True)
         self.loadButton.setGeometry(QtCore.QRect(570, 620, 281, 51))
         self.loadButton.setObjectName("loadButton")
         self.saveButton = QtWidgets.QPushButton(self.centralwidget)
@@ -56,7 +56,7 @@ class Ui_Main(object):
         self.outputLabel = QtWidgets.QLabel(self.centralwidget)
         self.outputLabel.setGeometry(QtCore.QRect(280, 10, 861, 601))
         self.outputLabel.setText("")
-        self.outputLabel.setPixmap(QtGui.QPixmap(".\\__pictures__\\blank.png"))
+        self.outputLabel.setPixmap(QtGui.QPixmap("__pictures__/blank.png"))
         self.outputLabel.setScaledContents(True)
         self.outputLabel.setObjectName("outputLabel")
         self.errorLabel = QtWidgets.QLabel(self.centralwidget)
@@ -77,6 +77,10 @@ class Ui_Main(object):
         _translate = QtCore.QCoreApplication.translate
         Main.setWindowTitle(_translate("Main", "Coronavirus Minority Game"))
         self.startButton.setText(_translate("Main", "Start"))
+        self.popTextEdit.setPlaceholderText(_translate("Main", "Integer greater than 10"))
+        self.daysTextEdit.setPlaceholderText(_translate("Main", "Integer greater than 0"))
+        self.stimeTextEdit.setPlaceholderText(_translate("Main", "Integer greater than 0"))
+        self.norTextEdit.setPlaceholderText(_translate("Main", "Integer greater than 0"))
         self.popLabel.setText(_translate("Main", "Population Size:"))
         self.daysLabel.setText(_translate("Main", "Number of Days:"))
         self.itimeLabel.setText(_translate("Main", "Sick Time:"))
@@ -85,6 +89,7 @@ class Ui_Main(object):
         self.saveButton.setText(_translate("Main", "Save"))
         self.errorLabel.setText(_translate("Main", "No Errors\n"
 "Currently Present"))
+        self.rosTextEdit.setPlaceholderText(_translate("Main", "Number between 0-1"))
         self.rosLabel.setText(_translate("Main", "Rate of Spread:"))
 
 

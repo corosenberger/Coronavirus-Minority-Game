@@ -1,4 +1,4 @@
-import pyc.DiseaseC as dc
+import PythonC.DiseaseC as dc
 import random
 
 class Disease:

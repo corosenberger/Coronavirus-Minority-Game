@@ -1,4 +1,4 @@
-import pyc.GroupC as gc
+import PythonC.GroupC as gc
 import Agent
 import Brain
 from collections import deque
@@ -64,11 +64,9 @@ class Groups:
         def getGoingOut():
             SUBTEAM_2_PLACEHOLDER(self.groups,self.agents,self.aChance)
             return [g.getAttendees() for g in self.groups]
-        prefs, out = getPreferences(), getGoingOut()
+        prefs, outs = getPreferences(), getGoingOut()
 
-        attendees = [[] for _ in range(self.numRestaurants)]
-        for p,g in zip(prefs,out):
-            attendees[p].append(g)
+        attendees = gc.getAttendees(prefs,outs,self.numRestaurants)
         return attendees
     
     def passDay(self):
@@ -79,8 +77,7 @@ class Groups:
 
     def getWinners(self):
         winners = gc.getWinners(self.agents)
-        for g in self.groups:
-            g.updateGroup()
+        for g in self.groups: g.updateGroup()
         return winners
 
     def getScores(self):
