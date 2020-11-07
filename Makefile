@@ -1,24 +1,30 @@
 
-USER_NAME=chrisor
+CC=gcc
+DelCom=del
 
-PythonHeaderLocation=C:\Users\$(USER_NAME)\anaconda3\include
-PythonFlagLibLocation=C:\Users\$(USER_NAME)\anaconda3\libs
+User=chrisor
+
+PythonHeaderLocation=C:\Users\$(User)\anaconda3\include
+PythonFlagLibLocation=C:\Users\$(User)\anaconda3\libs
 PythonVersionFlag=-lpython38
 
+GuiName=GUI.ui
+
+CCodeDir=.\C Code
+PydDir=.\Python Code\PythonC
+GuiDir=.\Python Code
+
 all:
-	gcc -c -I $(PythonHeaderLocation) ".\C Code\Disease.c" -o DiseaseC.o
-	gcc -shared -s DiseaseC.o -L $(PythonFlagLibLocation) $(PythonVersionFlag) -o ".\Python Code\pyc\DiseaseC.pyd"
-	del DiseaseC.o
-	gcc -c -I $(PythonHeaderLocation) ".\C Code\Group.c" -o GroupC.o
-	gcc -shared -s GroupC.o -L $(PythonFlagLibLocation) $(PythonVersionFlag) -o ".\Python Code\pyc\GroupC.pyd"
-	del GroupC.o
+	$(CC) -c -I $(PythonHeaderLocation) "$(CCodeDir)\Disease.c" -o DiseaseC.o
+	$(CC) -shared -s DiseaseC.o -L $(PythonFlagLibLocation) $(PythonVersionFlag) -o "$(PydDir)\DiseaseC.pyd"
+	$(DelCom) DiseaseC.o
+	$(CC) -c -I $(PythonHeaderLocation) "$(CCodeDir)\Group.c" -o GroupC.o
+	$(CC) -shared -s GroupC.o -L $(PythonFlagLibLocation) $(PythonVersionFlag) -o "$(PydDir)\GroupC.pyd"
+	$(DelCom) GroupC.o
+
+gui:
+	pyuic5 -x $(GuiName) -o "$(GuiDir)\XMLOut.py"
 
 clean:
-	rm DiseaseC.o
-	rm ".\Python Code\DiseaseC.pyd"
-	rm GroupC.o
-	rm ".\Python Code\GroupC.pyd"
-
-wclean:
-	del ".\Python Code\pyc\DiseaseC.pyd"
-	del ".\Python Code\pyc\GroupC.pyd"
+	$(DelCom) "$(PydDir)\DiseaseC.pyd"
+	$(DelCom) "$(PydDir)\GroupC.pyd"
