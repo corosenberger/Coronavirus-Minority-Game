@@ -46,15 +46,33 @@ static PyObject* getGroupSizes(PyObject* self, PyObject* args) {
         int randIdx = rand()%numGroups;
         sizes[randIdx]++;
         if(sizes[randIdx] == maxSize) {
-            int temp = sizes[randIdx];
-            sizes[randIdx] = sizes[numGroups-1];
-            sizes[numGroups-1] = temp;
+            sizes[randIdx] ^= sizes[numGroups-1] ^= sizes[randIdx] ^= sizes[numGroups-1]; //swap
             numGroups--;
         }
     }
 
     for(int i = 0; i < PyList_Size(out); i++) PyList_SetItem(out,i,Py_BuildValue("i",sizes[i]));
     return out;
+}
+
+static PyObject* getAttendees(PyObject* self, PyObject* args) {
+    PyObject* prefs;
+    PyObject* outs;
+    int numRestaurants;
+
+    if(!PyArg_ParseTuple(args,"OOi",&prefs,&outs,&numRestaurants)) return NULL;
+
+    PyObject* attendees = PyList_New(numRestaurants);
+    for(int i = 0; i < PyList_Size(attendees); i++) PyList_SetItem(attendees,i,PyList_New(0));
+    
+    for(int i = 0; i < PyList_Size(prefs); i++) {
+        long p = PyLong_AsLong(PyList_GetItem(prefs,i));
+        PyObject* g = PyList_GetItem(outs,i);
+        PyObject* res = PyList_GetItem(attendees,p);
+        PyList_Append(res,g);
+    }
+
+    return attendees;
 }
 
 static PyObject* getWinners(PyObject* self, PyObject* args) {
