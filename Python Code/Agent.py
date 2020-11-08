@@ -12,12 +12,15 @@ class Agent:
         self.willGoOut = False
         self.wentOut = False
         if random.random() <= disease.startSickChance:
-            if random.random() <= disease.startSymptomaticChance:
+            if disease.sickTime > 0 and random.random() <= disease.startSymptomaticChance:
                 self.phase = SYMPTOMATIC
                 self.daysLeft = random.randint(1,disease.sickTime+1)
-            else:
+            elif disease.incubationTime > 0:
                 self.phase = ASYMPTOMATIC
                 self.daysLeft = random.randint(1,disease.incubationTime+1)
+            else:
+                self.phase = HEALTHY
+                self.daysLeft = -1
         else:
             self.phase = HEALTHY
             self.daysLeft = -1

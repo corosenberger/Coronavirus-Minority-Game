@@ -28,7 +28,7 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         self.threadpool = QtCore.QThreadPool()
         self.inputs = {
             #Disease inputs
-            'startSickChance': 0.01,
+            'startSickChance': 0.02,
             'startSymptomaticChance': 0.5,
             'rateOfSpread': 0.5,
             'sickTime': 1,
@@ -71,10 +71,14 @@ class MinorityGameGUI(XMLOut.Ui_Main):
                     self.inputs['incubationTime'] = incubationTime
                     self.inputs['numRestaurants'] = numRestaurants
                     self.inputs['rateOfSpread'] = rateOfSpread
+                else:
+                    noError = False
                 return noError
         if setInputs(): #for full operation, use this line
             self.errorLabel.setText('Simulation Processing\nPlease Wait')
             self.startButton.setEnabled(False)
+            self.loadButton.setEnabled(False)
+            self.saveButton.setEnabled(False)
             mr = MainRunner(self.inputs)
             mr.signals.result.connect(self.startButtonResults)
             mr.signals.finished.connect(self.startButtonFinished)
@@ -110,20 +114,25 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         self.stimeTextEdit.setText(saveData[2])
         self.norTextEdit.setText(saveData[3])
         self.rosTextEdit.setText(saveData[4])
+        self.startButton.setEnabled(True)
+        self.loadButton.setEnabled(True)
+        self.saveButton.setEnabled(True)
+        self.errorLabel.setText('Data Loaded \nSucessfully')
 
     def saveButtonClicked(self):
         copyfile('.\\__pictures__\\current.png','.\\__save__\\save.png')
         if os.path.exists(".\\__save__\\save.txt"):
             os.remove(".\\__save__\\save.txt")
-        save = open(".\\__save__\\save.txt","w+")
         saveData = ""
         saveData += str(self.inputs['numAgents']) + ','
         saveData += str(self.inputs['numDays']) + ','
         saveData += str(self.inputs['incubationTime']) + ','
         saveData += str(self.inputs['numRestaurants']) + ','
         saveData += str(self.inputs['rateOfSpread'])
+        save = open(".\\__save__\\save.txt","w+")
         save.write(saveData)
         save.close()
+        self.errorLabel.setText('Data Saved \nSuccessfully')
 
 if __name__ == "__main__":
     import sys
