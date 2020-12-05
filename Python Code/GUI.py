@@ -30,8 +30,8 @@ class MinorityGameGUI(XMLOut.Ui_Main):
             #Disease inputs
             'startSickChance': 0.02,
             'startSymptomaticChance': 0.5,
-            'rateOfSpread': 0.5,
-            'sickTime': 1,
+            'rateOfSpread': 1,
+            'sickTime': 0,
             'incubationTime': 14,
             'immuneTime': 10,
             
@@ -39,10 +39,20 @@ class MinorityGameGUI(XMLOut.Ui_Main):
             'numGroups': 200,
             'numAgents': 1000,
             'numRestaurants': 10,
-            'gChance': 0.1,
-            'aChance': 0.5,
             
-            'numDays': 1000
+            'numDays': 1000,
+
+            #Sub-team 2 Inputs
+            'weather_condition': 5,
+            'rate_of_spread': 1,
+            'restaurant_capacity': 100,
+            'un_employment_rate': 0,
+            'num_agents': 10000,
+            'num_rounds': 1000,
+
+            'capacity': 100,
+            'condition': 5,
+            'urate': 0
         }
 
     def setupUi(self, Main):
@@ -61,16 +71,24 @@ class MinorityGameGUI(XMLOut.Ui_Main):
                 incubationTime = int(self.stimeTextEdit.toPlainText())
                 numRestaurants = int(self.norTextEdit.toPlainText())
                 rateOfSpread = float(self.rosTextEdit.toPlainText())
+                weather = float(self.weatherTextEdit.toPlainText())
+                capacity = int(self.capacityTextEdit.toPlainText())
+                urate = float(self.urateTextEdit.toPlainText())
             except:
                 noError = False
             finally:
-                if numAgents >= 10 and numDays > 0 and incubationTime > 0 and numRestaurants > 0 and 0 <= rateOfSpread <= 1:
-                    self.inputs['numAgents'] = numAgents
+                if noError and numAgents >= 10 and numDays > 0 and incubationTime > 0 and numRestaurants > 0 and \
+                        0 <= rateOfSpread <= 3.5 and weather > 0 and capacity > 0 and 0 <= urate <= 1:
+                    self.inputs['numAgents'] = self.inputs['num_agents']= numAgents
                     self.inputs['numGroups'] = numAgents // 5
-                    self.inputs['numDays'] = numDays
+                    self.inputs['numDays'] = self.inputs['num_rounds'] = numDays
                     self.inputs['incubationTime'] = incubationTime
                     self.inputs['numRestaurants'] = numRestaurants
-                    self.inputs['rateOfSpread'] = rateOfSpread
+                    self.inputs['rateOfSpread'] = rateOfSpread / incubationTime
+                    self.inputs['rate_of_spread'] = rateOfSpread
+                    self.inputs['condition'] = self.inputs['weather_condition'] = weather
+                    self.inputs['capacity'] = self.inputs['restaurant_capacity'] = capacity
+                    self.inputs['urate'] = self.inputs['un_employment_rate'] = urate
                 else:
                     noError = False
                 return noError
@@ -87,10 +105,12 @@ class MinorityGameGUI(XMLOut.Ui_Main):
             self.errorLabel.setText('One or Multiple\nInputs Invalid')
 
     def startButtonResults(self,outputs):
-        sick, healthy, winners = outputs
+        sick, healthy, attendance = outputs
         x = list(sick.keys())
-        y = list((c,a,b) for a,b,c in zip(sick.values(),healthy.values(),winners.values()))
-        plt.plot(x,y)
+        fig1 = plt.plot(x,sick.values(),label='Sick')
+        fig2 = plt.plot(x,healthy.values(),label='Healthy')
+        fig3 = plt.plot(x,attendance.values(),label='Attendance')
+        plt.legend(handles=[fig1[0],fig2[0],fig3[0]])
         plt.savefig('.\\__pictures__\\current.png')
         plt.close()
         self.outputLabel.setPixmap(QtGui.QPixmap('.\\__pictures__\\current.png'))
@@ -114,6 +134,9 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         self.stimeTextEdit.setText(saveData[2])
         self.norTextEdit.setText(saveData[3])
         self.rosTextEdit.setText(saveData[4])
+        self.weatherTextEdit.setText(saveData[5])
+        self.capacityTextEdit.setText(saveData[6])
+        self.urateTextEdit.setText(saveData[7])
         self.startButton.setEnabled(True)
         self.loadButton.setEnabled(True)
         self.saveButton.setEnabled(True)
@@ -128,7 +151,10 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         saveData += str(self.inputs['numDays']) + ','
         saveData += str(self.inputs['incubationTime']) + ','
         saveData += str(self.inputs['numRestaurants']) + ','
-        saveData += str(self.inputs['rateOfSpread'])
+        saveData += str(self.inputs['rateOfSpread'] * self.inputs['incubationTime']) + ','
+        saveData += str(self.inputs['condition']) + ','
+        saveData += str(self.inputs['capacity']) + ','
+        saveData += str(self.inputs['urate'])
         save = open(".\\__save__\\save.txt","w+")
         save.write(saveData)
         save.close()

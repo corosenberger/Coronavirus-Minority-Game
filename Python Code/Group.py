@@ -1,14 +1,9 @@
 import PythonC.GroupC as gc
 import Agent
 import Brain
-from collections import deque
 import random
 
 MAX_GROUP_SIZE = 10
-
-def SUBTEAM_2_PLACEHOLDER(groups,agents,aChance):
-    subteam2input = [random.random() <= 0.5 and a.phase != Agent.SYMPTOMATIC for a in agents]
-    gc.processSubTeam2Input(groups,subteam2input)
 
 class Groups:
     class Group:
@@ -46,12 +41,10 @@ class Groups:
         def __setitem__(self,i,v): self.agents[i] = v
         def __delitem__(self,i): self.agents.pop(i)
 
-    def __init__(self,numGroups,numAgents,numRestaurants,gChance,aChance,disease):
+    def __init__(self,numGroups,numAgents,numRestaurants,disease):
         assert numGroups*MAX_GROUP_SIZE >= numAgents
         self.numRestaurants = numRestaurants
         self.disease = disease
-        self.gChance = gChance
-        self.aChance = aChance
 
         groupSizes = gc.getGroupSizes(numAgents,numGroups,MAX_GROUP_SIZE)
         self.groups = [self.Group(sz,disease) for sz in groupSizes]
@@ -62,14 +55,14 @@ class Groups:
             for g in self.groups: g.setPreference(self.numRestaurants)
             return [g.preference for g in self.groups]
         def getGoingOut():
-            SUBTEAM_2_PLACEHOLDER(self.groups,self.agents,self.aChance)
             return [g.getAttendees() for g in self.groups]
         prefs, outs = getPreferences(), getGoingOut()
 
         attendees = gc.getAttendees(prefs,outs,self.numRestaurants)
         return attendees
     
-    def passDay(self):
+    def passDay(self, subteam2input):
+        gc.processSubTeam2Input(self.groups,subteam2input)
         attendance = self.getAttendees()
         self.disease.infect(attendance)
         for a in self.agents: a.passDay(self.disease)

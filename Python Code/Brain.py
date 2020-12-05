@@ -23,8 +23,8 @@ class Brain:
         self.bgrads = [0]*len(self.layerList) #the gradients of all the biases
         if weights == None or biases == None:
             for i in range(1,len(self.layerList)): #initializes weights and biases
-                self.weightsList.append((np.random.rand(self.layerList[i],self.layerList[i-1])-1)/(np.sqrt(self.layerList[i-1])))
-                self.biasesList.append((np.random.rand(self.layerList[i],1)-1)/(np.sqrt(self.layerList[i-1])))
+                self.weightsList.append(np.random.randn(self.layerList[i],self.layerList[i-1]))
+                self.biasesList.append(np.random.randn(self.layerList[i],1))
         else:
             for i in range(1,len(self.layerList)): #allows for the use of previously trained nets
                 self.weightsList.append(np.array(weights[i]).reshape(self.layerList[i],self.layerList[i-1]))
