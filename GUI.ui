@@ -2,24 +2,27 @@
 <ui version="4.0">
  <class>Main</class>
  <widget class="QMainWindow" name="Main">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>1161</width>
-    <height>681</height>
+    <height>854</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>1161</width>
-    <height>681</height>
+    <height>854</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>1161</width>
-    <height>681</height>
+    <height>854</height>
    </size>
   </property>
   <property name="baseSize">
@@ -206,8 +209,8 @@
    <widget class="QLabel" name="errorLabel">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>530</y>
+      <x>30</x>
+      <y>770</y>
       <width>211</width>
       <height>71</height>
      </rect>
@@ -227,7 +230,7 @@ Currently Present</string>
      </rect>
     </property>
     <property name="placeholderText">
-     <string>Number between 0-1</string>
+     <string>Number between 0-3.5</string>
     </property>
    </widget>
    <widget class="QLabel" name="rosLabel">
@@ -241,6 +244,84 @@ Currently Present</string>
     </property>
     <property name="text">
      <string>Rate of Spread:</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="weatherTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>510</y>
+      <width>241</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>Number greater than 0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="weatherLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>480</y>
+      <width>421</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Weather Condition:</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="capacityTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>610</y>
+      <width>241</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>Integer greater than 0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="capacityLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>580</y>
+      <width>421</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Restaurant Capacity:</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="urateTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>710</y>
+      <width>241</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>Number between 0-1</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="urateLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>680</y>
+      <width>421</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Unemployment Rate</string>
     </property>
    </widget>
   </widget>
