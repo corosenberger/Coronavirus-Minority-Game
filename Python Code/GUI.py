@@ -1,8 +1,11 @@
 import Main as be
+import GUI2 as av
 import XMLOut
 import os
+import base64
 from shutil import copyfile
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.uic import loadUi
 from matplotlib import pyplot as plt
 
 class MainRunnerSignals(QtCore.QObject):
@@ -29,7 +32,7 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         self.inputs = {
             #Disease inputs
             'startSickChance': 0.02,
-            'startSymptomaticChance': 0.5,
+            'startSymptomaticChance': 1,
             'rateOfSpread': 1,
             'sickTime': 0,
             'incubationTime': 14,
@@ -39,6 +42,7 @@ class MinorityGameGUI(XMLOut.Ui_Main):
             'numGroups': 200,
             'numAgents': 1000,
             'numRestaurants': 10,
+            'averageGroupSize': 5,
             
             'numDays': 1000,
 
@@ -54,18 +58,21 @@ class MinorityGameGUI(XMLOut.Ui_Main):
             'condition': 5,
             'urate': 0
         }
+        self.window = QtWidgets.QMainWindow()
+        self.ui = av.SettingsGUI(self.inputs)
+        self.ui.setupUi(self.window)
 
     def setupUi(self, Main):
         super(MinorityGameGUI, self).setupUi(Main)
         self.startButton.clicked.connect(self.startButtonClicked)
         self.loadButton.clicked.connect(self.loadButtonClicked)
         self.saveButton.clicked.connect(self.saveButtonClicked)
+        self.advancedButton.clicked.connect(self.advancedButtonClicked)
 
     def startButtonClicked(self):
         def setInputs():
             noError = True
             try:
-                numAgents = numDays = incubationTime = numRestaurants = rateOfSpread = -1
                 numAgents = int(self.popTextEdit.toPlainText())
                 numDays = int(self.daysTextEdit.toPlainText())
                 incubationTime = int(self.stimeTextEdit.toPlainText())
@@ -80,7 +87,7 @@ class MinorityGameGUI(XMLOut.Ui_Main):
                 if noError and numAgents >= 10 and numDays > 0 and incubationTime > 0 and numRestaurants > 0 and \
                         0 <= rateOfSpread <= 3.5 and weather > 0 and capacity > 0 and 0 <= urate <= 1:
                     self.inputs['numAgents'] = self.inputs['num_agents']= numAgents
-                    self.inputs['numGroups'] = numAgents // 5
+                    self.inputs['numGroups'] = numAgents // self.inputs['averageGroupSize']
                     self.inputs['numDays'] = self.inputs['num_rounds'] = numDays
                     self.inputs['incubationTime'] = incubationTime
                     self.inputs['numRestaurants'] = numRestaurants
@@ -94,9 +101,11 @@ class MinorityGameGUI(XMLOut.Ui_Main):
                 return noError
         if setInputs(): #for full operation, use this line
             self.errorLabel.setText('Simulation Processing\nPlease Wait')
+            self.window.close()
             self.startButton.setEnabled(False)
             self.loadButton.setEnabled(False)
             self.saveButton.setEnabled(False)
+            self.advancedButton.setEnabled(False)
             mr = MainRunner(self.inputs)
             mr.signals.result.connect(self.startButtonResults)
             mr.signals.finished.connect(self.startButtonFinished)
@@ -120,32 +129,47 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         self.startButton.setEnabled(True)
         self.loadButton.setEnabled(True)
         self.saveButton.setEnabled(True)
+        self.advancedButton.setEnabled(True)
 
     def loadButtonClicked(self):
-        if not (os.path.exists(".\\__save__\\save.txt") and os.path.exists(".\\__save__\\save.png")):
-            self.errorLabel.setText("No Save Data \nwas Found")
-            return
-        self.outputLabel.setPixmap(QtGui.QPixmap('.\\__save__\\save.png'))
-        save = open(".\\__save__\\save.txt","r")
-        saveData = save.read().split(',')
+        fname = QtWidgets.QFileDialog.getOpenFileName(filter='*.cmgsav')[0]
+
+        if fname == '': return
+
+        save = open(fname,'r')
+        saveData = save.read()
+        saveVals = saveData[:saveData.find('\n')].split(',')
+        savePic = base64.b64decode(bytes(saveData[saveData.find('\n')+1:],'utf-8'))
         save.close()
-        self.popTextEdit.setText(saveData[0])
-        self.daysTextEdit.setText(saveData[1])
-        self.stimeTextEdit.setText(saveData[2])
-        self.norTextEdit.setText(saveData[3])
-        self.rosTextEdit.setText(saveData[4])
-        self.weatherTextEdit.setText(saveData[5])
-        self.capacityTextEdit.setText(saveData[6])
-        self.urateTextEdit.setText(saveData[7])
+
+        self.popTextEdit.setText(saveVals[0])
+        self.daysTextEdit.setText(saveVals[1])
+        self.stimeTextEdit.setText(saveVals[2])
+        self.norTextEdit.setText(saveVals[3])
+        self.rosTextEdit.setText(saveVals[4])
+        self.weatherTextEdit.setText(saveVals[5])
+        self.capacityTextEdit.setText(saveVals[6])
+        self.urateTextEdit.setText(saveVals[7])
+        self.inputs['startSickChance'] = float(saveVals[8])
+        self.inputs['immuneTime'] = int(saveVals[9])
+        self.inputs['averageGroupSize'] = int(saveVals[10])
+
+        with open('.\\__pictures__\\current.png','wb') as currPic:
+            currPic.truncate()
+            currPic.write(savePic)
+        self.outputLabel.setPixmap(QtGui.QPixmap('.\\__pictures__\\current.png'))
+
         self.startButton.setEnabled(True)
         self.loadButton.setEnabled(True)
         self.saveButton.setEnabled(True)
+        self.advancedButton.setEnabled(True)
         self.errorLabel.setText('Data Loaded \nSucessfully')
 
     def saveButtonClicked(self):
-        copyfile('.\\__pictures__\\current.png','.\\__save__\\save.png')
-        if os.path.exists(".\\__save__\\save.txt"):
-            os.remove(".\\__save__\\save.txt")
+        fname = QtWidgets.QFileDialog.getSaveFileName(filter='*.cmgsav')[0]
+
+        if fname == '': return
+
         saveData = ""
         saveData += str(self.inputs['numAgents']) + ','
         saveData += str(self.inputs['numDays']) + ','
@@ -154,11 +178,30 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         saveData += str(self.inputs['rateOfSpread'] * self.inputs['incubationTime']) + ','
         saveData += str(self.inputs['condition']) + ','
         saveData += str(self.inputs['capacity']) + ','
-        saveData += str(self.inputs['urate'])
-        save = open(".\\__save__\\save.txt","w+")
+        saveData += str(self.inputs['urate']) + ','
+        saveData += str(self.inputs['startSickChance']) + ','
+        saveData += str(self.inputs['immuneTime']) + ','
+        saveData += str(self.inputs['averageGroupSize'])
+        saveData += '\n'
+
+        with open('.\\__pictures__\\current.png','rb') as savePic:
+            picData = base64.b64encode(savePic.read())
+
+        save = open(fname,'w+')
         save.write(saveData)
         save.close()
+        save = open(fname,'ab')
+        save.write(picData)
+        save.close()
+
         self.errorLabel.setText('Data Saved \nSuccessfully')
+
+    def advancedButtonClicked(self):
+        self.ui.sschanceTextEdit.setText(str(self.inputs['startSickChance']))
+        self.ui.imtimeTextEdit.setText(str(self.inputs['immuneTime']))
+        self.ui.agsTextEdit.setText(str(self.inputs['averageGroupSize']))
+        self.ui.errorLabel.setText('No Errors\nCurrently Present')
+        self.window.show()
 
 if __name__ == "__main__":
     import sys
