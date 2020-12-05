@@ -10,19 +10,19 @@
     <x>0</x>
     <y>0</y>
     <width>1161</width>
-    <height>854</height>
+    <height>806</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>1161</width>
-    <height>854</height>
+    <height>806</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>1161</width>
-    <height>854</height>
+    <height>806</height>
    </size>
   </property>
   <property name="baseSize">
@@ -42,8 +42,8 @@
     <property name="geometry">
      <rect>
       <x>280</x>
-      <y>620</y>
-      <width>281</width>
+      <y>750</y>
+      <width>211</width>
       <height>51</height>
      </rect>
     </property>
@@ -161,9 +161,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>620</y>
-      <width>281</width>
+      <x>500</x>
+      <y>750</y>
+      <width>211</width>
       <height>51</height>
      </rect>
     </property>
@@ -177,9 +177,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>860</x>
-      <y>620</y>
-      <width>281</width>
+      <x>720</x>
+      <y>750</y>
+      <width>211</width>
       <height>51</height>
      </rect>
     </property>
@@ -192,8 +192,8 @@
      <rect>
       <x>280</x>
       <y>10</y>
-      <width>861</width>
-      <height>601</height>
+      <width>871</width>
+      <height>731</height>
      </rect>
     </property>
     <property name="text">
@@ -210,7 +210,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>770</y>
+      <y>730</y>
       <width>211</width>
       <height>71</height>
      </rect>
@@ -224,7 +224,7 @@ Currently Present</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>410</y>
+      <y>400</y>
       <width>241</width>
       <height>41</height>
      </rect>
@@ -237,7 +237,7 @@ Currently Present</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>380</y>
+      <y>370</y>
       <width>421</width>
       <height>21</height>
      </rect>
@@ -250,7 +250,7 @@ Currently Present</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>510</y>
+      <y>490</y>
       <width>241</width>
       <height>41</height>
      </rect>
@@ -263,7 +263,7 @@ Currently Present</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>480</y>
+      <y>460</y>
       <width>421</width>
       <height>21</height>
      </rect>
@@ -276,7 +276,7 @@ Currently Present</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>610</y>
+      <y>580</y>
       <width>241</width>
       <height>41</height>
      </rect>
@@ -289,7 +289,7 @@ Currently Present</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>580</y>
+      <y>550</y>
       <width>421</width>
       <height>21</height>
      </rect>
@@ -302,7 +302,7 @@ Currently Present</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>710</y>
+      <y>670</y>
       <width>241</width>
       <height>41</height>
      </rect>
@@ -315,13 +315,29 @@ Currently Present</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>680</y>
+      <y>640</y>
       <width>421</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
      <string>Unemployment Rate</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="advancedButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>940</x>
+      <y>750</y>
+      <width>211</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Advanced Settings</string>
     </property>
    </widget>
   </widget>

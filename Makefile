@@ -9,6 +9,7 @@ PythonFlagLibLocation=C:\Users\$(User)\anaconda3\libs
 PythonVersionFlag=-lpython38
 
 GuiName=GUI.ui
+Gui2Name=GUI2.ui
 
 CCodeDir=.\C Code
 PydDir=.\Python Code\PythonC
@@ -24,6 +25,7 @@ all:
 
 gui:
 	pyuic5 -x $(GuiName) -o "$(GuiDir)\XMLOut.py"
+	pyuic5 -x $(Gui2Name) -o "$(GuiDir)\XMLOut2.py"
 
 clean:
 	$(DelCom) "$(PydDir)\DiseaseC.pyd"
