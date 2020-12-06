@@ -34,9 +34,11 @@ class database:
     def add_save(cls, final_turnout, turnout_per_round, parameter_values): 
         save_array = []
         if os.path.exists('restaurant_game_data_file'): # checks to see if data file already exists on computer, loads old data
+            erase = False
             with open('restaurant_game_data_file','rb') as rfp:
                 save_array = pickle.load(rfp)
-                database.erase_entire_file()
+                erase = True
+            if erase: database.erase_entire_file()
         temp_save = database(final_turnout, turnout_per_round, parameter_values)
         save_array.append(temp_save)
         database.store_save(save_array)

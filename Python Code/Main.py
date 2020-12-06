@@ -22,7 +22,7 @@ def main(inputs):
         sick[i] = groups.getSick()
         healthy[i] = groups.getHealthy()
 
-        agent_decision, num_going, num_notgoing = mtd.compute_agent_decision(agents, Global_mem , thrs_hold)
+        agent_decision, num_going, _ = mtd.compute_agent_decision(agents, Global_mem , thrs_hold)
         atdn = groups.passDay(agent_decision)
         winner_loser = groups.getWinners()
         mtd.compute_new_best(agents, winner_loser, agent_decision, num_going, Global_mem)
@@ -30,6 +30,8 @@ def main(inputs):
         Global_mem.insert(0,num_going)
 
         attendance[i] = sum(len(g) for r in atdn for g in r)
+
+    
 
     return sick,healthy,attendance
 

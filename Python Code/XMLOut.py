@@ -12,9 +12,9 @@ class Ui_Main(object):
     def setupUi(self, Main):
         Main.setObjectName("Main")
         Main.setEnabled(True)
-        Main.resize(1161, 806)
+        Main.resize(1380, 806)
         Main.setMinimumSize(QtCore.QSize(1161, 806))
-        Main.setMaximumSize(QtCore.QSize(1161, 806))
+        Main.setMaximumSize(QtCore.QSize(1380, 806))
         Main.setBaseSize(QtCore.QSize(1161, 681))
         self.centralwidget = QtWidgets.QWidget(Main)
         self.centralwidget.setEnabled(True)
@@ -55,7 +55,7 @@ class Ui_Main(object):
         self.saveButton.setGeometry(QtCore.QRect(720, 750, 211, 51))
         self.saveButton.setObjectName("saveButton")
         self.outputLabel = QtWidgets.QLabel(self.centralwidget)
-        self.outputLabel.setGeometry(QtCore.QRect(280, 10, 871, 731))
+        self.outputLabel.setGeometry(QtCore.QRect(280, 10, 1091, 731))
         self.outputLabel.setText("")
         self.outputLabel.setPixmap(QtGui.QPixmap("__pictures__/blank.png"))
         self.outputLabel.setScaledContents(True)
@@ -91,6 +91,10 @@ class Ui_Main(object):
         self.advancedButton.setEnabled(True)
         self.advancedButton.setGeometry(QtCore.QRect(940, 750, 211, 51))
         self.advancedButton.setObjectName("advancedButton")
+        self.databaseButton = QtWidgets.QPushButton(self.centralwidget)
+        self.databaseButton.setEnabled(True)
+        self.databaseButton.setGeometry(QtCore.QRect(1160, 750, 211, 51))
+        self.databaseButton.setObjectName("databaseButton")
         Main.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(Main)
@@ -114,13 +118,14 @@ class Ui_Main(object):
 "Currently Present"))
         self.rosTextEdit.setPlaceholderText(_translate("Main", "Number between 0-3.5"))
         self.rosLabel.setText(_translate("Main", "Rate of Spread:"))
-        self.weatherTextEdit.setPlaceholderText(_translate("Main", "Number greater than 0"))
+        self.weatherTextEdit.setPlaceholderText(_translate("Main", "Number between 1-5"))
         self.weatherLabel.setText(_translate("Main", "Weather Condition:"))
         self.capacityTextEdit.setPlaceholderText(_translate("Main", "Integer greater than 0"))
         self.capacityLabel.setText(_translate("Main", "Restaurant Capacity:"))
         self.urateTextEdit.setPlaceholderText(_translate("Main", "Number between 0-1"))
         self.urateLabel.setText(_translate("Main", "Unemployment Rate"))
         self.advancedButton.setText(_translate("Main", "Advanced Settings"))
+        self.databaseButton.setText(_translate("Main", "Access Database"))
 
 
 if __name__ == "__main__":

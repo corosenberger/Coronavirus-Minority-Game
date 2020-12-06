@@ -1,6 +1,4 @@
 import XMLOut2
-import os
-from shutil import copyfile
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class SettingsGUI(XMLOut2.Ui_Main):

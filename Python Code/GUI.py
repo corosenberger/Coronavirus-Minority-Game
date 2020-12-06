@@ -1,11 +1,12 @@
 import Main as be
+import database as db
 import GUI2 as av
+import GUI3 as dbg
 import XMLOut
 import os
 import base64
 from shutil import copyfile
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.uic import loadUi
 from matplotlib import pyplot as plt
 
 class MainRunnerSignals(QtCore.QObject):
@@ -32,7 +33,7 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         self.inputs = {
             #Disease inputs
             'startSickChance': 0.02,
-            'startSymptomaticChance': 1,
+            'startSymptomaticChance': 0.5,
             'rateOfSpread': 1,
             'sickTime': 0,
             'incubationTime': 14,
@@ -61,6 +62,9 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         self.window = QtWidgets.QMainWindow()
         self.ui = av.SettingsGUI(self.inputs)
         self.ui.setupUi(self.window)
+        self.window2 = QtWidgets.QMainWindow()
+        self.ui2 = dbg.DatabaseGUI()
+        self.ui2.setupUi(self.window2)
 
     def setupUi(self, Main):
         super(MinorityGameGUI, self).setupUi(Main)
@@ -68,6 +72,7 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         self.loadButton.clicked.connect(self.loadButtonClicked)
         self.saveButton.clicked.connect(self.saveButtonClicked)
         self.advancedButton.clicked.connect(self.advancedButtonClicked)
+        self.databaseButton.clicked.connect(self.databaseButtonClicked)
 
     def startButtonClicked(self):
         def setInputs():
@@ -85,7 +90,7 @@ class MinorityGameGUI(XMLOut.Ui_Main):
                 noError = False
             finally:
                 if noError and numAgents >= 10 and numDays > 0 and incubationTime > 0 and numRestaurants > 0 and \
-                        0 <= rateOfSpread <= 3.5 and weather > 0 and capacity > 0 and 0 <= urate <= 1:
+                        0 <= rateOfSpread <= 3.5 and 0< weather <= 5 and capacity > 0 and 0 <= urate <= 1:
                     self.inputs['numAgents'] = self.inputs['num_agents']= numAgents
                     self.inputs['numGroups'] = numAgents // self.inputs['averageGroupSize']
                     self.inputs['numDays'] = self.inputs['num_rounds'] = numDays
@@ -102,10 +107,12 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         if setInputs(): #for full operation, use this line
             self.errorLabel.setText('Simulation Processing\nPlease Wait')
             self.window.close()
+            self.window2.close()
             self.startButton.setEnabled(False)
             self.loadButton.setEnabled(False)
             self.saveButton.setEnabled(False)
             self.advancedButton.setEnabled(False)
+            self.databaseButton.setEnabled(False)
             mr = MainRunner(self.inputs)
             mr.signals.result.connect(self.startButtonResults)
             mr.signals.finished.connect(self.startButtonFinished)
@@ -115,6 +122,12 @@ class MinorityGameGUI(XMLOut.Ui_Main):
 
     def startButtonResults(self,outputs):
         sick, healthy, attendance = outputs
+
+        finalTurnout = attendance[len(attendance)-1]
+        averageTurnout = sum(attendance.values())/len(attendance)
+        param = [sick, healthy, attendance]
+        db.database.add_save(finalTurnout,averageTurnout,param)
+        
         x = list(sick.keys())
         fig1 = plt.plot(x,sick.values(),label='Sick')
         fig2 = plt.plot(x,healthy.values(),label='Healthy')
@@ -130,10 +143,10 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         self.loadButton.setEnabled(True)
         self.saveButton.setEnabled(True)
         self.advancedButton.setEnabled(True)
+        self.databaseButton.setEnabled(True)
 
     def loadButtonClicked(self):
         fname = QtWidgets.QFileDialog.getOpenFileName(filter='*.cmgsav')[0]
-
         if fname == '': return
 
         save = open(fname,'r')
@@ -175,7 +188,6 @@ class MinorityGameGUI(XMLOut.Ui_Main):
 
     def saveButtonClicked(self):
         fname = QtWidgets.QFileDialog.getSaveFileName(filter='*.cmgsav')[0]
-
         if fname == '': return
 
         saveData = ""
@@ -210,6 +222,10 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         self.ui.agsTextEdit.setText(str(self.inputs['averageGroupSize']))
         self.ui.errorLabel.setText('No Errors\nCurrently Present')
         self.window.show()
+
+    def databaseButtonClicked(self):
+        self.ui2.newButtonClicked()
+        self.window2.show()
 
 if __name__ == "__main__":
     import sys
