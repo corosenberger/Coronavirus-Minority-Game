@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1161</width>
+    <width>1380</width>
     <height>806</height>
    </rect>
   </property>
@@ -21,7 +21,7 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>1161</width>
+    <width>1380</width>
     <height>806</height>
    </size>
   </property>
@@ -192,7 +192,7 @@
      <rect>
       <x>280</x>
       <y>10</y>
-      <width>871</width>
+      <width>1091</width>
       <height>731</height>
      </rect>
     </property>
@@ -256,7 +256,7 @@ Currently Present</string>
      </rect>
     </property>
     <property name="placeholderText">
-     <string>Number greater than 0</string>
+     <string>Number between 1-5</string>
     </property>
    </widget>
    <widget class="QLabel" name="weatherLabel">
@@ -338,6 +338,22 @@ Currently Present</string>
     </property>
     <property name="text">
      <string>Advanced Settings</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="databaseButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>1160</x>
+      <y>750</y>
+      <width>211</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Access Database</string>
     </property>
    </widget>
   </widget>

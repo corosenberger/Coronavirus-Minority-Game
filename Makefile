@@ -10,6 +10,7 @@ PythonVersionFlag=-lpython38
 
 GuiName=GUI.ui
 Gui2Name=GUI2.ui
+Gui3Name=GUI3.ui
 
 CCodeDir=.\C Code
 PydDir=.\Python Code\PythonC
@@ -26,6 +27,7 @@ all:
 gui:
 	pyuic5 -x $(GuiName) -o "$(GuiDir)\XMLOut.py"
 	pyuic5 -x $(Gui2Name) -o "$(GuiDir)\XMLOut2.py"
+	pyuic5 -x $(Gui3Name) -o "$(GuiDir)\XMLOut3.py"
 
 clean:
 	$(DelCom) "$(PydDir)\DiseaseC.pyd"
