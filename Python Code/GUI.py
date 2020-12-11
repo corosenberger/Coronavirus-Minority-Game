@@ -5,6 +5,7 @@ import GUI3 as dbg
 import XMLOut
 import os
 import base64
+import ast
 from shutil import copyfile
 from PyQt5 import QtCore, QtGui, QtWidgets
 from matplotlib import pyplot as plt
@@ -123,10 +124,10 @@ class MinorityGameGUI(XMLOut.Ui_Main):
     def startButtonResults(self,outputs):
         sick, healthy, attendance = outputs
 
-        finalTurnout = attendance[len(attendance)-1]
-        averageTurnout = sum(attendance.values())/len(attendance)
-        param = [sick, healthy, attendance]
-        db.database.add_save(finalTurnout,averageTurnout,param)
+        self.finalTurnout = attendance[len(attendance)-1]
+        self.averageTurnout = sum(attendance.values())/len(attendance)
+        self.param = [sick, healthy, attendance]
+        db.database.add_save(self.finalTurnout,self.averageTurnout,self.param)
         
         x = list(sick.keys())
         fig1 = plt.plot(x,sick.values(),label='Sick')
@@ -149,11 +150,12 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         fname = QtWidgets.QFileDialog.getOpenFileName(filter='*.cmgsav')[0]
         if fname == '': return
 
-        save = open(fname,'r')
-        saveData = save.read()
-        saveVals = saveData[:saveData.find('\n')].split(',')
-        savePic = base64.b64decode(bytes(saveData[saveData.find('\n')+1:],'utf-8'))
-        save.close()
+        with open(fname,'r') as save:
+            saveData = save.read().split('\t')
+            saveVals = saveData[0].split(',')
+            self.finalTurnout = int(saveData[1])
+            self.averageTurnout = float(saveData[2])
+            self.param = ast.literal_eval(saveData[3])
 
         self.popTextEdit.setText(saveVals[0])
         self.inputs['numAgents'] = int(saveVals[0])
@@ -175,9 +177,16 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         self.inputs['immuneTime'] = int(saveVals[9])
         self.inputs['averageGroupSize'] = int(saveVals[10])
 
-        with open('.\\__pictures__\\current.png','wb') as currPic:
-            currPic.truncate()
-            currPic.write(savePic)
+        db.database.add_save(self.finalTurnout,self.averageTurnout,self.param)
+
+        sick, healthy, attendance = self.param
+        x = list(sick.keys())
+        fig1 = plt.plot(x,sick.values(),label='Sick')
+        fig2 = plt.plot(x,healthy.values(),label='Healthy')
+        fig3 = plt.plot(x,attendance.values(),label='Attendance')
+        plt.legend(handles=[fig1[0],fig2[0],fig3[0]])
+        plt.savefig('.\\__pictures__\\current.png')
+        plt.close()
         self.outputLabel.setPixmap(QtGui.QPixmap('.\\__pictures__\\current.png'))
 
         self.startButton.setEnabled(True)
@@ -202,17 +211,16 @@ class MinorityGameGUI(XMLOut.Ui_Main):
         saveData += str(self.inputs['startSickChance']) + ','
         saveData += str(self.inputs['immuneTime']) + ','
         saveData += str(self.inputs['averageGroupSize'])
-        saveData += '\n'
+        saveData += '\t'
 
-        with open('.\\__pictures__\\current.png','rb') as savePic:
-            picData = base64.b64encode(savePic.read())
+        saveData += str(self.finalTurnout)
+        saveData += '\t'
+        saveData += str(self.averageTurnout)
+        saveData += '\t'
+        saveData += str(self.param)
 
-        save = open(fname,'w+')
-        save.write(saveData)
-        save.close()
-        save = open(fname,'ab')
-        save.write(picData)
-        save.close()
+        with open(fname,'w+') as save:
+            save.write(saveData)
 
         self.errorLabel.setText('Data Saved \nSuccessfully')
 
