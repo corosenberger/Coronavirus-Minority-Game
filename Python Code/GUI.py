@@ -3,9 +3,7 @@ import database as db
 import GUI2 as av
 import GUI3 as dbg
 import XMLOut
-import os
 import ast
-from shutil import copyfile
 from PyQt5 import QtCore, QtGui, QtWidgets
 from matplotlib import pyplot as plt
 
