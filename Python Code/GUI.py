@@ -4,7 +4,6 @@ import GUI2 as av
 import GUI3 as dbg
 import XMLOut
 import os
-import base64
 import ast
 from shutil import copyfile
 from PyQt5 import QtCore, QtGui, QtWidgets
