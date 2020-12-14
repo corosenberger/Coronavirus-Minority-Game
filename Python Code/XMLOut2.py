@@ -57,7 +57,7 @@ class Ui_Main(object):
         Main.setWindowTitle(_translate("Main", "Coronavirus Minority Game"))
         self.applyButton.setText(_translate("Main", "Apply"))
         self.sschanceTextEdit.setPlaceholderText(_translate("Main", "Number between 0-1"))
-        self.imtimeTextEdit.setPlaceholderText(_translate("Main", "Non-negative Integer"))
+        self.imtimeTextEdit.setPlaceholderText(_translate("Main", "Any Integer Greater than -2"))
         self.agsTextEdit.setPlaceholderText(_translate("Main", "Integer between 1-10"))
         self.sschanceLabel.setText(_translate("Main", "Start Sick Chance:"))
         self.imtimeLabel.setText(_translate("Main", "Immune Time"))
