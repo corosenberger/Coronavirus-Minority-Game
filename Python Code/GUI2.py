@@ -21,7 +21,7 @@ class SettingsGUI(XMLOut2.Ui_Main):
             except:
                 noError = False
             finally:
-                if noError and 0 <= sschance <= 1 and imtime > 0 and 0 < ags <= 10:
+                if noError and 0 <= sschance <= 1 and imtime >= -1 and 0 < ags <= 10:
                     self.inputs['startSickChance'] = sschance
                     self.inputs['immuneTime'] = imtime
                     self.inputs['averageGroupSize'] = ags

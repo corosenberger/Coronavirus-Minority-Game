@@ -88,7 +88,8 @@ class MinorityGameGUI(XMLOut.Ui_Main):
                 noError = False
             finally:
                 if noError and numAgents >= 10 and numDays > 0 and incubationTime > 0 and numRestaurants > 0 and \
-                        0 <= rateOfSpread <= 3.5 and 0< weather <= 5 and capacity > 0 and 0 <= urate <= 1:
+                        0 <= rateOfSpread <= 3.5 and 0< weather <= 5 and capacity > 0 and 0 <= urate <= 1 \
+                        and numAgents > self.inputs['averageGroupSize']:
                     self.inputs['numAgents'] = self.inputs['num_agents']= numAgents
                     self.inputs['numGroups'] = numAgents // self.inputs['averageGroupSize']
                     self.inputs['numDays'] = self.inputs['num_rounds'] = numDays
