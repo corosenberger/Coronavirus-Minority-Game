@@ -128,4 +128,4 @@ Describes how long an agent is immune to the virus after recovery; can be any in
 
 ### Average Group Size 
 
-Describes the average number of agents in each group; can be any integer greater than 0 and less than Population size
+Describes the average number of agents in each group; can be any integer between 1 and 10
