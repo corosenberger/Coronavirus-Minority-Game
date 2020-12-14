@@ -74,7 +74,7 @@
      </rect>
     </property>
     <property name="placeholderText">
-     <string>Non-negative Integer</string>
+     <string>Any Integer Greater than -2</string>
     </property>
    </widget>
    <widget class="QTextEdit" name="agsTextEdit">
