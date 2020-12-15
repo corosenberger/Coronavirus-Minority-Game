@@ -122,10 +122,14 @@ Describes the percentage of the population that currently does not have a job; c
 
 Describes how likely an agent is to be infected at the start of the minority game; can be any number between 0 and 1
 
-### Immune Time 
+### Immune Time
 
 Describes how long an agent is immune to the virus after recovery; can be any integer greater than or equal to -1 (-1 being immune forever)
 
-### Average Group Size 
+### Average Group Size
 
 Describes the average number of agents in each group; can be any integer between 1 and 10
+### Demo 2 Video
+https://youtu.be/61AHO1mIoRo
+### Demo 1 video
+https://drive.google.com/file/d/1KdrJyZeHdb9OpZc9aNh-CYUXABDNIgXr/view?usp=sharing
